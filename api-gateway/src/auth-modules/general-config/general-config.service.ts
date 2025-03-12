@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
-import * as crypto from 'crypto'
+import * as crypto from 'crypto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class GeneralConfigService {
   private configData: any;
   private reloadTime: NodeJS.Timeout | null = null;
+  private jwtService : JwtService;
 
   constructor() {
     this.loadConfig();
@@ -14,7 +16,14 @@ export class GeneralConfigService {
 
   private loadConfig() {
     const fileContent = fs.readFileSync('./src/config.json', 'utf-8');
+
     this.configData = JSON.parse(fileContent);
+
+    let jwtSecret = this.getConfigData('JWT_SECRET');
+
+    this.jwtService = new JwtService({
+      secret: jwtSecret,
+    });
   }
 
   private watchConfigFile() {
@@ -55,6 +64,29 @@ export class GeneralConfigService {
     } catch (error) {
       console.error("Error generating OTP:", error);
       return null;
+    }
+  }
+
+  async generateAccessAndRefreshJWTToken(payload : any){
+    try {
+
+      let [accessTokenExp, refreshTokenExp] = await Promise.all([
+        this.getConfigData('accessTokenExp'),
+        this.getConfigData('refreshTokenExp'),
+      ])
+
+      let accessToken = await this.jwtService.signAsync(payload, {
+        expiresIn: accessTokenExp
+      })
+
+      let refreshToken = await this.jwtService.signAsync(payload, {
+        expiresIn: refreshTokenExp
+      })
+
+      return {accessToken, refreshToken, accessTokenExp, refreshTokenExp}
+
+    } catch (error) {
+      
     }
   }
 }

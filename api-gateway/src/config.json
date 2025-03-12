@@ -1,4 +1,7 @@
 {
     "apiPrefix" : "api/v1",
-    "OTPHashSecret" : "This is the otp secret"
+    "OTPHashSecret" : "This is the otp secret",
+    "accessTokenExp" : 900000,
+    "refreshTokenExp" : 86400000,
+    "JWT_SECRET":"This is the jwt secret !"
 }
