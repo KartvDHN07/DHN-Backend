@@ -1,0 +1,4 @@
+{
+    "apiPrefix" : "api/v1",
+    "OTPHashSecret" : "This is the otp secret"
+}
