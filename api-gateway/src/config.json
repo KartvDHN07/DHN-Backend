@@ -1,7 +1,18 @@
 {
     "apiPrefix" : "api/v1",
+    "sharedService" : "shared",
     "OTPHashSecret" : "This is the otp secret",
     "accessTokenExp" : 900000,
     "refreshTokenExp" : 86400000,
-    "JWT_SECRET":"This is the jwt secret !"
+    "JWT_SECRET":"This is the jwt secret !",
+    "unauthorisedResponseMsg" : "Unauthorized Access!",
+    "alreadyExistMsg" : "Already Exist !",
+    "notFoundMsg" : "Data Not Found !",
+    "invalidCredentialsMsg" : "Invalid Credentials !",
+    "dataFetchedSuccessfullyMsg" : "Data Fetched Successfully !",
+    "createdSuccessfullyMsg" : "Created Successfully !",
+    "updatedSuccessfullyMsg" : "Updated Successfully !",
+    "deletedSuccessfullyMsg" : "Deleted Successfully !",
+    "errorWhileCreatingMsg" : "Error While Creating Data !",
+    "errorWhileFetchingMsg" : "Error While Fetching Data !"
 }

@@ -9,6 +9,7 @@ import { UsersModule } from './shared-modules/users/users.module';
 import { GeneralConfigModule } from './auth-modules/general-config/general-config.module';
 import * as path from 'path';
 import { JwtModule } from '@nestjs/jwt';
+import { CreatorsModule } from './shared-modules/creators/creators.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { JwtModule } from '@nestjs/jwt';
     AuthModule,
     UsersModule,
     GeneralConfigModule,
+    CreatorsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

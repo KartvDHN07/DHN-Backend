@@ -89,4 +89,20 @@ export class GeneralConfigService {
       
     }
   }
+
+  async validateAccessToken(cookieObj : {accessToken : string, refreshToken : string}){
+    try {
+      let {accessToken, refreshToken} = cookieObj;
+
+      let validateAccessToken = await this.jwtService.verifyAsync(accessToken);
+
+      if(validateAccessToken){
+        return validateAccessToken;
+      }
+
+      return null;
+    } catch (error) {
+      return null;
+    }
+  }
 }

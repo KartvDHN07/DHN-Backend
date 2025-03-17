@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './shared-modules/users/users.module';
+import { CreatorsModule } from './shared-modules/creators/creators.module';
 import * as path from 'path';
 
 @Module({
@@ -24,6 +26,10 @@ import * as path from 'path';
         entities: [path.join(__dirname, '**', '*.entity{.ts,.js}')],
       }),
     }),
+
+    UsersModule,
+
+    CreatorsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
