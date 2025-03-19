@@ -1,29 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreatorEntity } from 'src/database/creators/creator.entity';
 import { formatResponseHandler } from 'src/handlers/formattedResponse';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import { PermissionEntity } from 'src/database/permissions/permission.entity';
 
 @Injectable()
-export class CreatorsService {
-    constructor(@InjectRepository(CreatorEntity) private readonly creatorRepository : Repository<CreatorEntity>){}
+export class PermissionsService {
+    constructor(@InjectRepository(PermissionEntity) private readonly PermissionRepository : Repository<PermissionEntity>){}
 
-    async addCreatorDataHandler(reqBody){
+    async addPermissionDataHandler(reqBody){
         try {
-            let isExist = await this?.creatorRepository?.findOneBy({email : reqBody?.email});
+            let isExist = await this?.PermissionRepository?.findOneBy({slug : reqBody?.slug});
 
             if(isExist) return formatResponseHandler(reqBody?.alreadyExistMsg, null, 400);
 
-            let hashedPassword = await bcrypt.hash(reqBody?.password, 10);
-
-            let newRecordInstance = await this?.creatorRepository?.create({
+            let newRecordInstance = await this?.PermissionRepository?.create({
                 ...reqBody,
-                password : hashedPassword,
                 createdAt : new Date()
             })
 
-            let createdRecord = await this.creatorRepository.save(newRecordInstance);
+            let createdRecord = await this.PermissionRepository.save(newRecordInstance);
 
             if(createdRecord) return formatResponseHandler(reqBody?.createdSuccessfullyMsg, null, 201);
 
@@ -33,9 +29,9 @@ export class CreatorsService {
         }
     }
 
-    async getAllCreatorsHandler(reqBody){
+    async getAllPermissionsHandler(reqBody){
         try {
-            let fetchedData = await this?.creatorRepository?.find({order : {createdAt : 'DESC'}, select : ['id', 'name', 'email', 'contact']});
+            let fetchedData = await this?.PermissionRepository?.find({order : {createdAt : 'DESC'}, select : ['id', 'name', 'slug', 'isActive']});
 
             if(fetchedData?.length > 0) return formatResponseHandler(reqBody?.dataFetchedSuccessfullyMsg, fetchedData, 200);
 
@@ -45,9 +41,9 @@ export class CreatorsService {
         }
     }
 
-    async getCreatorByIdHandler(reqBody){
+    async getPermissionByIdHandler(reqBody){
         try {
-            let fetchedData = await this?.creatorRepository?.find({where : {id : reqBody?.id}, select : ['id', 'name', 'email', 'contact']});
+            let fetchedData = await this?.PermissionRepository?.find({where : {id : reqBody?.id}, select : ['id', 'name', 'slug', 'isActive']});
 
             if(fetchedData?.length > 0) return formatResponseHandler(reqBody?.dataFetchedSuccessfullyMsg, fetchedData, 200);
 
@@ -57,24 +53,17 @@ export class CreatorsService {
         }
     }
 
-    async updateCreatorDataHandler(reqBody){
+    async updatePermissionDataHandler(reqBody){
         try {
             let {id, updatedSuccessfullyMsg, notFoundMsg, errorWhileUpdatingMsg, ...restUpdateObj} = reqBody;
 
-            let fetchedData = await this?.creatorRepository?.findOne({where : {id}});
+            let fetchedData = await this?.PermissionRepository?.findOne({where : {id}});
 
             if(!fetchedData) return formatResponseHandler(notFoundMsg, null, 404);
 
-            let hashedPassword : any = null;
-            
-            if(reqBody?.password){
-                hashedPassword = await bcrypt.hash(reqBody?.password, 10);
-            }
-
-            let updatedData = await this?.creatorRepository?.update(reqBody?.id, {
+            let updatedData = await this?.PermissionRepository?.update(reqBody?.id, {
                 ...restUpdateObj,
                 updatedAt : new Date(),
-                password : hashedPassword ?? fetchedData?.password
             }); 
 
             if(updatedData?.affected != 0) return formatResponseHandler(updatedSuccessfullyMsg, null, 200);
@@ -85,15 +74,15 @@ export class CreatorsService {
         }
     }
 
-    async deleteCreatorDataHandler(reqBody){
+    async deletePermissionDataHandler(reqBody){
         try {
             let {id} = reqBody;
 
-            let isExist = await this?.creatorRepository?.findOneBy({id});
+            let isExist = await this?.PermissionRepository?.findOneBy({id});
 
             if(!isExist) return formatResponseHandler(reqBody?.notFoundMsg, null, 404);
 
-            let deletedData = await this?.creatorRepository?.delete({id});
+            let deletedData = await this?.PermissionRepository?.delete({id});
 
             if(deletedData?.affected != 0) return formatResponseHandler(reqBody?.deletedSuccessfullyMsg, null, 200);
 

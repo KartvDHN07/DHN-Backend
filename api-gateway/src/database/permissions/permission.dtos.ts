@@ -1,36 +1,31 @@
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
-export class CreateCreatorDto {
+export class CreatePermissionDTO {
   @IsNotEmpty()
   name: string;
 
   @IsNotEmpty()
-  email: string;
-
-  @IsNotEmpty()
-  password: string;
+  slug: string;
 
   @IsOptional()
-  contact: string;
+  isActive: boolean;
 
   @IsOptional()
   createdAt: Date;
 }
 
-export class UpdateCreatorDto {
+export class UpdatePermissionDTO {
 
   @IsOptional()
   name: string;
 
   @IsOptional()
-  email: string;
+  slug: string;
 
   @IsOptional()
-  password: string;
-
-  @IsOptional()
-  contact: string;
+  isActive: boolean;
 
   @IsOptional()
   updatedAt: Date;
 }
+

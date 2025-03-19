@@ -14,5 +14,6 @@
     "updatedSuccessfullyMsg" : "Updated Successfully !",
     "deletedSuccessfullyMsg" : "Deleted Successfully !",
     "errorWhileCreatingMsg" : "Error While Creating Data !",
-    "errorWhileFetchingMsg" : "Error While Fetching Data !"
+    "errorWhileFetchingMsg" : "Error While Fetching Data !",
+    "errorWhileUpdatingMsg" : "Error While Updating Data !"
 }

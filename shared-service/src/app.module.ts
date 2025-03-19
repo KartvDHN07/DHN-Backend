@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './shared-modules/users/users.module';
 import { CreatorsModule } from './shared-modules/creators/creators.module';
+import { PermissionsModule } from './shared-modules/permissions/permissions.module';
 import * as path from 'path';
 
 @Module({
@@ -30,6 +31,8 @@ import * as path from 'path';
     UsersModule,
 
     CreatorsModule,
+
+    PermissionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
