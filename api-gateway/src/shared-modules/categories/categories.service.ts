@@ -2,16 +2,16 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { GeneralConfigService } from 'src/auth-modules/general-config/general-config.service';
 import { formattedResponseHandler } from 'src/handlers/formatResponseHandler';
-import { addCreatorDataPtrn, deleteCreatorDataPtrn, getAllCreatorsPtrn, getCreatorByIdPtrn, updateCreatorDataPtrn } from '../event-msg-pattern/creator.event.msg';
 import { firstValueFrom } from 'rxjs';
+import { addCategoryDataPtrn, deleteCategoryDataPtrn, getAllCategoriesPtrn, getCategoryByIdPtrn, updateCategoryDataPtrn } from '../event-msg-pattern/categories.event.msg';
 
 @Injectable()
-export class CreatorsService {
+export class CategoriesService {
     constructor(@Inject('SharedService') private readonly sharedServiceClient: ClientProxy,
         private readonly generalConfigService: GeneralConfigService
     ){}
 
-    async addCreatorDataHandler(cookies, response, reqBody) {
+    async addCategoryDataHandler(cookies, response, reqBody) {
         try {
             let isAuthorized = await this.generalConfigService.validateAccessToken(cookies);
 
@@ -23,7 +23,7 @@ export class CreatorsService {
                 this.generalConfigService.getConfigData('errorWhileCreatingMsg')
             ]);
 
-            const pattern = { cmd : addCreatorDataPtrn}
+            const pattern = { cmd : addCategoryDataPtrn}
 
             const {status, data, message} = await firstValueFrom(this.sharedServiceClient.send(
                 pattern, 
@@ -36,7 +36,7 @@ export class CreatorsService {
         }
     }
 
-    async getAllCreatorsHandler(cookies, response){
+    async getAllCategorysHandler(cookies, response){
         try {
             const isAuthorized = await this.generalConfigService.validateAccessToken(cookies);
 
@@ -48,7 +48,7 @@ export class CreatorsService {
                 this.generalConfigService.getConfigData('errorWhileFetchingMsg')
             ]);
 
-            const pattern = { cmd : getAllCreatorsPtrn};
+            const pattern = { cmd : getAllCategoriesPtrn};
 
             const {status, data, message} = await firstValueFrom(this.sharedServiceClient.send(
                 pattern, 
@@ -61,7 +61,7 @@ export class CreatorsService {
         }
     }
 
-    async getCreatorByIdHandler(cookies, id, response){
+    async getCategoryByIdHandler(cookies, slug, response){
         try {
             const isAuthorized = await this.generalConfigService.validateAccessToken(cookies);
 
@@ -73,11 +73,11 @@ export class CreatorsService {
                 this.generalConfigService.getConfigData('errorWhileFetchingMsg')
             ]);
 
-            const pattern = { cmd : getCreatorByIdPtrn};
+            const pattern = { cmd : getCategoryByIdPtrn};
 
             const {status, data, message} = await firstValueFrom(this.sharedServiceClient.send(
                 pattern, 
-                {id, dataFetchedSuccessfullyMsg, notFoundMsg, errorWhileFetchingMsg}
+                {slug, dataFetchedSuccessfullyMsg, notFoundMsg, errorWhileFetchingMsg}
             ));         
 
             return formattedResponseHandler(response, data, status, message);
@@ -86,13 +86,13 @@ export class CreatorsService {
         }
     }
 
-    async updateCreatorDataHandler(cookies, id, reqBody, response){
+    async updateCategoryDataHandler(cookies, slug, reqBody, response){
         try {
             let isAuthorized = await this.generalConfigService.validateAccessToken(cookies);
 
             if(!isAuthorized) return formattedResponseHandler(response, null, 401, this.generalConfigService.getConfigData('unauthorisedResponseMsg'));
 
-            if(!reqBody?.name && !reqBody?.email && !reqBody?.password && !reqBody?.contact && !reqBody?.updatedAt && !reqBody?.role) return formattedResponseHandler(response, null, 400, 'No Data To Update !');
+            if(!reqBody?.name && !reqBody?.slug && !reqBody?.status && !reqBody?.updatedAt && !reqBody?.seo) return formattedResponseHandler(response, null, 400, 'No Data To Update !');
             
             let [updatedSuccessfullyMsg, notFoundMsg, errorWhileUpdatingMsg] = await Promise.all ([
                 this.generalConfigService.getConfigData('updatedSuccessfullyMsg'), 
@@ -100,10 +100,10 @@ export class CreatorsService {
                 this.generalConfigService.getConfigData('errorWhileUpdatingMsg')
             ]);
 
-            const pattern = { cmd : updateCreatorDataPtrn};
+            const pattern = { cmd : updateCategoryDataPtrn};
 
             let {status, data, message} = await firstValueFrom(this.sharedServiceClient.send(pattern,
-                {id, ...reqBody, updatedSuccessfullyMsg, notFoundMsg, errorWhileUpdatingMsg}
+                {slug, ...reqBody, updatedSuccessfullyMsg, notFoundMsg, errorWhileUpdatingMsg}
             ))
 
             return formattedResponseHandler(response, data, status, message);
@@ -112,7 +112,7 @@ export class CreatorsService {
         }
     }
 
-    async deleteCreatorDataHandler(cookies, id, response){
+    async deleteCategoryDataHandler(cookies, slug, response){
         try {
             let isAuthorized = await this.generalConfigService.validateAccessToken(cookies);
 
@@ -124,10 +124,10 @@ export class CreatorsService {
                 this.generalConfigService.getConfigData('errorWhileDeletingMsg')
             ]);
 
-            const pattern = { cmd : deleteCreatorDataPtrn};
+            const pattern = { cmd : deleteCategoryDataPtrn};
 
             let {status, data, message} = await firstValueFrom(this.sharedServiceClient.send(pattern,
-                {id, deletedSuccessfullyMsg, notFoundMsg, errorWhileDeletingMsg}
+                {slug, deletedSuccessfullyMsg, notFoundMsg, errorWhileDeletingMsg}
             ))
 
             return formattedResponseHandler(response, data, status, message);

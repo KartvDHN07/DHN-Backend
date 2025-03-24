@@ -15,6 +15,9 @@ export class CreateCreatorDto {
 
   @IsOptional()
   createdAt: Date;
+
+  @IsOptional()
+  role : string;
 }
 
 export class UpdateCreatorDto {
@@ -33,4 +36,7 @@ export class UpdateCreatorDto {
 
   @IsOptional()
   updatedAt: Date;
+
+  @IsOptional()
+  role : string;
 }

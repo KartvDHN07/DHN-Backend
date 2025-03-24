@@ -12,6 +12,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { CreatorsModule } from './shared-modules/creators/creators.module';
 import { PermissionsModule } from './shared-modules/permissions/permissions.module';
 import { RolesModule } from './shared-modules/roles/roles.module';
+import { CategoriesModule } from './shared-modules/categories/categories.module';
 
 @Module({
   imports: [
@@ -34,8 +35,6 @@ import { RolesModule } from './shared-modules/roles/roles.module';
         transport: Transport.REDIS,
         options: {
           host: 'localhost',
-          // port: 8081,
-          //@ts-ignore
           retryAttempts: 10,        // Number of retry attempts
           retryDelay: 3000,         // Delay between retries in milliseconds
           connectTimeout: 10000,    // Timeout for connection in milliseconds
@@ -63,6 +62,7 @@ import { RolesModule } from './shared-modules/roles/roles.module';
     CreatorsModule,
     PermissionsModule,
     RolesModule,
+    CategoriesModule
   ],
   controllers: [AppController],
   providers: [AppService],

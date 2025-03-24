@@ -7,6 +7,7 @@ import { UsersModule } from './shared-modules/users/users.module';
 import { CreatorsModule } from './shared-modules/creators/creators.module';
 import { PermissionsModule } from './shared-modules/permissions/permissions.module';
 import { RolesModule } from './shared-modules/roles/roles.module';
+import { CategoriesModule } from './shared-modules/categories/categories.module';
 import * as path from 'path';
 
 @Module({
@@ -35,6 +36,8 @@ import * as path from 'path';
     PermissionsModule,
 
     RolesModule,
+
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

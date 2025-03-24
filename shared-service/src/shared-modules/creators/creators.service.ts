@@ -47,7 +47,7 @@ export class CreatorsService {
 
     async getCreatorByIdHandler(reqBody){
         try {
-            let fetchedData = await this?.creatorRepository?.find({where : {id : reqBody?.id}, select : ['id', 'name', 'email', 'contact']});
+            let fetchedData = await this?.creatorRepository?.find({where : {id : reqBody?.id}, select : ['id', 'name', 'email', 'contact'], relations : ['role']});
 
             if(fetchedData?.length > 0) return formatResponseHandler(reqBody?.dataFetchedSuccessfullyMsg, fetchedData, 200);
 
