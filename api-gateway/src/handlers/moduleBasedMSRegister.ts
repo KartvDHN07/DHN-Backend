@@ -3,10 +3,9 @@ import { Transport } from "@nestjs/microservices"
 export const MicroServiceRegister : any = (microServiceName : string) => {
     return {
         name : microServiceName,
-        transport : Transport.TCP,
+        transport : Transport.REDIS,
         options : {
             host : 'localhost',
-            port : 8081,
         }
     }
 }

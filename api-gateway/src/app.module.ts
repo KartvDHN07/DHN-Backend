@@ -31,10 +31,10 @@ import { RolesModule } from './shared-modules/roles/roles.module';
     ClientsModule.register([
       {
         name: 'SharedService',
-        transport: Transport.TCP,
+        transport: Transport.REDIS,
         options: {
           host: 'localhost',
-          port: 8081,
+          // port: 8081,
           //@ts-ignore
           retryAttempts: 10,        // Number of retry attempts
           retryDelay: 3000,         // Delay between retries in milliseconds
