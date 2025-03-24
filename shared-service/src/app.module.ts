@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './shared-modules/users/users.module';
 import { CreatorsModule } from './shared-modules/creators/creators.module';
 import { PermissionsModule } from './shared-modules/permissions/permissions.module';
+import { RolesModule } from './shared-modules/roles/roles.module';
 import * as path from 'path';
 
 @Module({
@@ -23,7 +24,6 @@ import * as path from 'path';
         port: Number(process.env.DB_PORT),
         username: process.env.DB_USERNAME,
         database: process.env.DB_DATABASE,
-        synchronize: true,
         entities: [path.join(__dirname, '**', '*.entity{.ts,.js}')],
       }),
     }),
@@ -33,6 +33,8 @@ import * as path from 'path';
     CreatorsModule,
 
     PermissionsModule,
+
+    RolesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

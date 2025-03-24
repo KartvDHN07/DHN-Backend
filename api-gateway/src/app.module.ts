@@ -11,6 +11,7 @@ import * as path from 'path';
 import { JwtModule } from '@nestjs/jwt';
 import { CreatorsModule } from './shared-modules/creators/creators.module';
 import { PermissionsModule } from './shared-modules/permissions/permissions.module';
+import { RolesModule } from './shared-modules/roles/roles.module';
 
 @Module({
   imports: [
@@ -34,6 +35,11 @@ import { PermissionsModule } from './shared-modules/permissions/permissions.modu
         options: {
           host: 'localhost',
           port: 8081,
+          //@ts-ignore
+          retryAttempts: 10,        // Number of retry attempts
+          retryDelay: 3000,         // Delay between retries in milliseconds
+          connectTimeout: 10000,    // Timeout for connection in milliseconds
+          maxRetriesPerRequest: 5,
         },
       },
     ]),
@@ -56,6 +62,7 @@ import { PermissionsModule } from './shared-modules/permissions/permissions.modu
     GeneralConfigModule,
     CreatorsModule,
     PermissionsModule,
+    RolesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
