@@ -13,6 +13,7 @@ import { CreatorsModule } from './shared-modules/creators/creators.module';
 import { PermissionsModule } from './shared-modules/permissions/permissions.module';
 import { RolesModule } from './shared-modules/roles/roles.module';
 import { CategoriesModule } from './shared-modules/categories/categories.module';
+import { TagsModule } from './shared-modules/tags/tags.module';
 
 @Module({
   imports: [
@@ -62,7 +63,8 @@ import { CategoriesModule } from './shared-modules/categories/categories.module'
     CreatorsModule,
     PermissionsModule,
     RolesModule,
-    CategoriesModule
+    CategoriesModule,
+    TagsModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -21,8 +21,9 @@ export class CategoryEntity extends BaseEntity {
 
     @OneToOne(()=>SeoEntity, {
         nullable : true,
-        onDelete : 'RESTRICT'
+        onDelete : 'RESTRICT',
+        cascade : true
     })
     @JoinColumn()
-    seo : string;
+    seo : SeoEntity;
 }

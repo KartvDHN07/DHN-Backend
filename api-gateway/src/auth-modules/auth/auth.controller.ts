@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { GeneralConfigService } from '../general-config/general-config.service';
 import { Response } from 'express';
 import { CreateUserDTO } from 'src/database/users/user.dtos';
-import { CompleteProfileDTO, OTPVerifyDTO, PasswordVerifyDTO } from 'src/database/auth/auth.dtos';
+import { AdminLoginDTO, CompleteProfileDTO, OTPVerifyDTO, PasswordVerifyDTO } from 'src/database/auth/auth.dtos';
 
 const genralService = new GeneralConfigService();
 
@@ -31,5 +31,10 @@ export class AuthController {
     @Post('complete/profile')
     async UpdateProfileSetup(@Body() requestData : CompleteProfileDTO, @Res() res : Response){
         return this.authService.UpdateProfileSetup(requestData, res)
+    }
+
+    @Post('admin/login')
+    async AdminLoginHandler(@Body() requestData : AdminLoginDTO, @Res() res : Response){
+        return this.authService.AdminLoginHandler(requestData, res)
     }
 }

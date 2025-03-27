@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { isNotEmpty, IsNotEmpty, IsOptional, Matches } from 'class-validator';
 
 export class OTPVerifyDTO {
   @IsNotEmpty()
@@ -23,16 +23,26 @@ export class PasswordVerifyDTO {
 }
 
 export class CompleteProfileDTO {
+  @IsNotEmpty()
+  id: string;
 
-    @IsNotEmpty()
-    id : string;
+  @IsNotEmpty()
+  name: string;
 
-    @IsNotEmpty()
-    name : string;
+  @IsNotEmpty()
+  password: string;
 
-    @IsNotEmpty()
-    password : string;
+  @IsNotEmpty()
+  confirmPassword: string;
+}
 
-    @IsNotEmpty()
-    confirmPassword : string;
+export class AdminLoginDTO {
+  @IsNotEmpty()
+  @Matches(/^(?=.*[\W_]).{8,}@\w+\.\w+$/, {
+    message: 'Email must be at least 8 characters long, contain at least one special character, and have a valid domain (e.g., @abc.com, @xyz.com, etc.)',
+  })
+  email: string;
+
+  @IsNotEmpty()
+  password: string;
 }

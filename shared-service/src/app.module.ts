@@ -8,6 +8,9 @@ import { CreatorsModule } from './shared-modules/creators/creators.module';
 import { PermissionsModule } from './shared-modules/permissions/permissions.module';
 import { RolesModule } from './shared-modules/roles/roles.module';
 import { CategoriesModule } from './shared-modules/categories/categories.module';
+import { TagsModule } from './shared-modules/tags/tags.module';
+import { TagsController } from './shared-modules/tags/tags.controller';
+import { TagsService } from './shared-modules/tags/tags.service';
 import * as path from 'path';
 
 @Module({
@@ -38,8 +41,10 @@ import * as path from 'path';
     RolesModule,
 
     CategoriesModule,
+
+    TagsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService]
 })
 export class AppModule {}

@@ -5,14 +5,16 @@ import { GeneralConfigService } from '../general-config/general-config.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/database/users/user.entity';
 import { Repository } from 'typeorm';
-import { CompleteProfileDTO, OTPVerifyDTO, PasswordVerifyDTO } from 'src/database/auth/auth.dtos';
+import { AdminLoginDTO, CompleteProfileDTO, OTPVerifyDTO, PasswordVerifyDTO } from 'src/database/auth/auth.dtos';
 import * as bcrypt from 'bcrypt'
+import { CreatorEntity } from 'src/database/creators/creator.entity';
 
 @Injectable()
 export class AuthService {
 
     constructor(private readonly generalConfigService : GeneralConfigService,
-        @InjectRepository(UserEntity) private userRepository : Repository<UserEntity>
+        @InjectRepository(UserEntity) private userRepository : Repository<UserEntity>,
+        @InjectRepository(CreatorEntity) private creatorRepository : Repository<CreatorEntity>
     ){}
 
     async LoginAndSignUpHandler(requestData : CreateUserDTO, response){
@@ -120,7 +122,6 @@ export class AuthService {
             return formattedResponseHandler(response, null, 401, 'Invalid Password !');
 
         } catch (error) {
-            console.log(error)
             return formattedResponseHandler(response, error, 400, null);
         }
     }
@@ -156,6 +157,39 @@ export class AuthService {
             
             if(updatedUser?.affected != 0) return formattedResponseHandler(response, null, 200, 'Profile Completion Successfully !');
 
+        } catch (error) {
+            return formattedResponseHandler(response, error, 400, null);
+        }
+    }
+
+    async AdminLoginHandler(requestData : AdminLoginDTO, response){
+        try {
+            let user  = await this.creatorRepository.findOneBy({email : requestData?.email})
+            if(!user) return formattedResponseHandler(response, null, 400, this.generalConfigService?.getConfigData('notFoundMsg'));
+
+            const isPasswordMatch = await bcrypt.compare(requestData.password, user.password);
+            if(!isPasswordMatch) return formattedResponseHandler(response, null, 400, 'Invalid Credentials !');
+
+            if(isPasswordMatch){
+
+                let {accessToken, refreshToken, accessTokenExp, refreshTokenExp} : any = await this?.generalConfigService?.generateAccessAndRefreshJWTToken({id : user?.id, name : user?.name, contact : user?.contact, email : user?.email});
+
+                await response.cookie('accessToken', accessToken,  {
+                    httpOnly: true, // Prevent client-side JavaScript access
+                    secure: true, // Use Secure flag in production
+                    sameSite: 'none', // Prevent CSRF attacks
+                    maxAge: accessTokenExp // 1 day expiration
+                });
+
+                await response.cookie('refreshToken', refreshToken,  {
+                    httpOnly: true, // Prevent client-side JavaScript access
+                    secure: true, // Use Secure flag in production
+                    sameSite: 'none', // Prevent CSRF attacks
+                    maxAge: refreshTokenExp, // 1 day expiration
+                });
+
+                return formattedResponseHandler(response, {verified : true}, 200, 'User Signed In Successfully !' );
+            }
         } catch (error) {
             return formattedResponseHandler(response, error, 400, null);
         }
